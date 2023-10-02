@@ -1,0 +1,154 @@
+<!--
+
+=========================================================
+* Volt Pro - Premium Bootstrap 5 Dashboard
+=========================================================
+
+* Product Page: https://themesberg.com/product/admin-dashboard/volt-bootstrap-5-dashboard
+* Copyright 2021 Themesberg (https://www.themesberg.com)
+* License (https://themesberg.com/licensing)
+
+* Designed and coded by https://themesberg.com
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
+
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    @@include('./_head.html', {
+        "path": "../..",
+        "title": "Geotherm model parameters defienition"
+    })
+</head>
+
+<body>
+
+        <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
+        @@if (environment === 'production') {
+            @@include('./_analytics_body.html')
+        }
+
+        @@include('./dashboard/_nav.html', {
+            "path": "../.."
+        })
+
+        @@include('./dashboard/_sidenav.html', {
+            "path": "../..",
+            "page": "forms",
+            "page_group": "components"
+        })
+
+        <main class="content">
+
+            @@include('./dashboard/_topbar.html', {
+                "path": "../.."
+            })
+
+            <div class="py-4">
+                <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+                    <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                        <li class="breadcrumb-item">
+                            <a href="#">
+                                <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item"><a href="#">Geotherm</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Model</li>
+                    </ol>
+                </nav>
+                <div class="d-flex justify-content-between w-100 flex-wrap">
+                    <div class="mb-3 mb-lg-0">
+                        <h1 class="h4">Model Paremeters Definition</h1>
+                        <p class="mb-0">Here You can define parameters for a geotherm model.</p>
+                    </div>
+                    <div hidden="true">
+                        <a href="https://themesberg.com/docs/volt-bootstrap-5-dashboard/components/forms/" class="btn btn-outline-gray"><i class="far fa-question-circle me-1"></i> Forms Docs</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card border-1 show components-section">
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-lg-4 col-sm-6">
+                                    <!-- Form -->
+                                    <div class="mb-1">
+                                        <label for="q0">q0 [mW/m^2] surface heat flow valaue range</label>
+                                        <input type="text" class="form-control" id="q0" aria-describedby="q0help" value="[34:1:40]">
+                                        <small id="q0help" class="form-text text-muted">Julia format range in form [start:increment:end], usually [30:1:40].</small>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="D">D [km] thickness of upper crust</label>
+                                        <input type="text" class="form-control" id="D" aria-describedby="Dhelp" value="16">
+                                        <small id="Dhelp" class="form-text text-muted">Usually 16 km, having in mind the crust's thickness to be 40-45 km.</small>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="Zbot">Zbot [km] vector of base of lithospheric layers</label>
+                                        <input type="text" class="form-control" id="Zbot" aria-describedby="Zbothelp" value="[16,23,39,300]">
+                                        <small id="Zbothelp" class="form-text text-muted">Usually this vector is [16,23,39,300] km.</small>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="Zmax">Zmax [km] maximum depth of model</label>
+                                        <input type="text" class="form-control" id="Zmax" aria-describedby="Zmaxhelp" value="255">
+                                        <small id="Zmaxhelp" class="form-text text-muted">Usually this vector is [16,23,39,300] km.</small>
+                                    </div>
+                                    <!-- End of Form -->
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <!-- Form -->
+                                    <div class="mb-1">
+                                        <label for="Dz">Dz [km] depth modeling step<br/>&nbsp;</label>
+                                        <input type="text" class="form-control" id="Dz" aria-describedby="Dzhelp" value="0.1">
+                                        <small id="Dzhelp" class="form-text text-muted">Usually it is 0.1 km, smaller values will not improve model relevance.</small>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="P">P partition coefficient for upper crustal</label>
+                                        <input type="text" class="form-control" id="P" aria-describedby="Phelp" value="0.74">
+                                        <small id="Phelp" class="form-text text-muted">Usually 0.74</small>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="H">H [uW/m^3] vector of heat production of lithospheric ....</label>
+                                        <input type="text" class="form-control" id="H" aria-describedby="Hhelp" value="[0,0.4,0.4,0.2]">
+                                        <small id="Hhelp" class="form-text text-muted">Usually this vector is [0,0.4,0.4,0.2].</small>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="iref">iref index to reference heat flow for elevation computation</label>
+                                        <input type="text" class="form-control" id="iref" aria-describedby="irefhelp" value="3">
+                                        <small id="irefhelp" class="form-text text-muted">Usually it is 3.</small>
+                                    </div>
+                                    <!-- End of Form -->
+                                </div>
+                                <div class="col-lg-4 col-sm-6">
+                                    <!-- Form -->
+                                    <div class="mb-1">
+                                        <label for="iref">Apply optimization stages</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                            <label class="form-check-label" for="flexSwitchCheckDefault">Optimize results</label><br/>
+                                            <small class="form-text text-muted">Optimization allows one to calculate optimal q0.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                </div>
+            </div>
+
+
+            @@include('./dashboard/_footer.html', {
+                "path": "../..",
+                "classes": "bg-dark text-white"
+            })
+        </main>
+
+    @@include('./_scripts.html', {
+        "path": "../.."
+    })
+
+</body>
+
+</html>
