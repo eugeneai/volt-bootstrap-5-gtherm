@@ -51,7 +51,7 @@
             <div class="table-settings mb-4">
                 <div class="row align-items-center justify-content-between">
                     <div class="col col-md-6 col-lg-3 col-xl-4">
-                        <div class="input-group me-2 me-lg-3 fmxw-400">
+                        <div class="input-group me-2 me-lg-3 fmxw-400" hidden="true">
                             <span class="input-group-text">
                                 <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
@@ -99,7 +99,7 @@
                         <tr>
                             <th class="border-gray-200">No.</th>
                             <th class="border-gray-200">Depth, km</th>
-                            <th class="border-gray-200">Preassure, MPa</th>
+                            <th class="border-gray-200">Preassure, GPa</th>
                             <th class="border-gray-200">Temperature, C</th>
                         </tr>
                     </thead>
@@ -198,10 +198,14 @@
         {"t":1253.55, "d":195.59, "p":195.59},
         {"t":943.75, "d":164.19, "p":164.19}
       ];
-      let staticData = {
-        dataName: 'Yb 63 Cpx',
-        input: tbl,
-        inputLength: tbl.length
+     for (i=0;i<tbl.length;i++) {
+         let y=tbl[i].d;
+         tbl[i].p=((y-6.3)/3.04).toFixed(3);
+     }
+     let staticData = {
+         dataName: 'Yb 63 Cpx',
+         input: tbl,
+         inputLength: tbl.length
       };
      let batchSize=10;
      let vueApp1=Vue.createApp({
