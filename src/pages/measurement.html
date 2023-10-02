@@ -38,7 +38,7 @@
 
         @@include('./dashboard/_sidenav.html', {
             "path": "..",
-            "page": "transactions"
+            "page": "measurement"
         })
 
         <main class="content">
@@ -105,7 +105,7 @@
                     </thead>
                     <tbody id="vue-mount-table">
                         <!-- Item -->
-                        <tr v-for="(item, index) in input">
+                        <tr v-for="(item, index) in displayInput">
                             <td>
                                 <a href="#" class="fw-bold" v-text="index+1">
                                     1
@@ -130,11 +130,14 @@
                             <li class="page-item">
                                 <a class="page-link" href="#">Previous</a>
                             </li>
-                            <li class="page-item">
+                            <li class="page-item active">
                                 <a class="page-link" href="#">1</a>
                             </li>
-                            <li class="page-item active">
+                            <li class="page-item">
                                 <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
                             </li>
                             <li class="page-item">
                                 <a class="page-link" href="#">Next</a>
@@ -144,7 +147,7 @@
                     <div class="fw-normal small mt-4
                                 mt-lg-0"
                          id="vue-total-mount"
-                         >Showing <b>25</b> out of <b v-text="inputLength">25</b> entries</div>
+                         >Showing <b>10</b> out of <b v-text="inputLength">25</b> entries</div>
                 </div>
             </div>
             @@include('./dashboard/_footer.html', {
@@ -200,11 +203,18 @@
         input: tbl,
         inputLength: tbl.length
       };
-      let vueApp1=Vue.createApp({
-        data() {
-          return staticData;
-        }
-      });
+     let batchSize=10;
+     let vueApp1=Vue.createApp({
+         data() {
+             return staticData;
+         },
+         computed: {
+             displayInput: function() {
+                 return staticData.input.slice(0,batchSize);
+             }
+         }
+
+     });
       vueApp1.mount('#vue-mount-table');
       let vueApp2=Vue.createApp({
         data() {
