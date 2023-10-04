@@ -20,7 +20,7 @@
 
 <head>
     @@include('./_head.html', {
-        "path": "../..",
+        "path": "../",
         "title": "Geotherm model parameters defienition"
     })
 </head>
@@ -29,22 +29,22 @@
 
         <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
         @@if (environment === 'production') {
-            @@include('./_analytics_body.html')
+            @@include('../_analytics_body.html')
         }
 
         @@include('./dashboard/_nav.html', {
-            "path": "../.."
+            "path": "../"
         })
 
         @@include('./dashboard/_sidenav.html', {
-            "path": "../..",
+            "path": "../",
             "page": "model",
         })
 
         <main class="content">
 
             @@include('./dashboard/_topbar.html', {
-                "path": "../.."
+                "path": "../"
             })
 
             <div class="py-4">
@@ -144,13 +144,13 @@
             </div>
 
             @@include('./dashboard/_footer.html', {
-                "path": "../..",
+                "path": ".",
                 "classes": "bg-dark text-white"
             })
         </main>
 
     @@include('./_scripts.html', {
-        "path": "../.."
+        "path": "../"
     })
 
 </body>
