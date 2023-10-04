@@ -126,12 +126,12 @@
             </div>
           </div>
         </li>
-        <li class="nav-item dropdown ms-lg-3">
+        <li class="nav-item dropdown ms-lg-3" id="vue-user-profile-data">
           <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="media d-flex align-items-center">
               <img class="avatar rounded-circle" alt="Image placeholder" src="@@path/assets/img/team/gravatar.png">
               <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
-                <span class="mb-0 font-small fw-bold text-gray-900">Geothem User</span>
+                <span class="mb-0 font-small fw-bold text-gray-900" v-text="user.name">Geotherm User</span>
               </div>
             </div>
           </a>

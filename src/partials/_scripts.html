@@ -47,3 +47,30 @@
 
 <!-- Vue 3 JS -->
 <script src="https://unpkg.com/vue@next"></script>
+
+<script>
+ let server="http://localhost:8000"
+ let API="/api/1.0/"
+ let SA=server+API
+ var userProfileApp = {};
+ function updateProfileApp(udj){
+     level = udj.level;
+     if (level=="OK") {
+         userProfileApp.$data.user=udj.value;
+     } else {
+         userProfileApp.$data.user.name="UNKNOWN";
+     }
+ }
+ userProfileApp=Vue.createApp({
+     data() {
+         fetch(SA+"user/cbb81349-cf71-587c-a1e9-27faf5f2c28c/data")
+             .then(resp => resp.json())
+             .then(updateProfileApp);
+         return {
+             user: {
+                 name:"Gravater"
+             }
+         }
+     }
+ }).mount("#vue-user-profile-data")
+</script>

@@ -124,7 +124,12 @@ gulp.task('vendor', function() {
 
 gulp.task('serve', gulp.series('scss', 'html', 'index', 'assets', 'vendor', function() {
     browserSync.init({
-        server: paths.temp.base
+      server: paths.temp.base,
+      cors: true,
+      middleware: function (req, res, next) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        next();
+      }
     });
 
     gulp.watch([paths.src.scss + '/volt/**/*.scss', paths.src.scss + '/custom/**/*.scss', paths.src.scss + '/volt.scss'], gulp.series('scss'));
