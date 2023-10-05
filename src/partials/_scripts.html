@@ -77,7 +77,7 @@
      }
  }
 
- if (COOKIES.user === undefined) {
+ if (COOKIES.user === undefined || COOKIES.user.length < 10) {
      resetSession()
  }
 
@@ -90,19 +90,21 @@
              document.cookie = 'user=' + v.uuid;
          };
          userProfileApp.$data.user=v;
+         userProfileApp.$data.logged=true;
      } else {
          userProfileApp.$data.user.name="UNKNOWN";
+         userProfileApp.$data.logged=false;
      }
  }
 
  function loginOrRegisterUser() {
-     return "cbb81349-cf71-587c-a1e9-27faf5f2c28c";
+     return "cbb81349-cf71-587c-a1e9-27faf5f2c28c"; // c
  }
 
  userProfileApp=Vue.createApp({
      data() {
          userUUID = COOKIES.user;
-         if (userUUID === undefined) {
+         if (userUUID === undefined || userUUID.length < 10) {
              userUUID = loginOrRegisterUser();
          }
          axios.post(SA + "user/" + userUUID + "/data")
@@ -116,8 +118,19 @@
          return {
              user: {
                  name:"Gravater"
-             }
+             },
+             logged:false,
+             message:"Logout"
+         }
+     },
+     methods: {
+         logout() {
+             this.logged = false;
+             document.cookie="user=";
+             userProfileApp.$data.user.name="UNKNOWN";
+             resetSession();
          }
      }
- }).mount("#vue-user-profile-data")
+ }).mount("#vue-user-profile-data");
+
 </script>
