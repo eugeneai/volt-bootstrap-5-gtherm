@@ -77,9 +77,11 @@
      }
  }
 
- if (COOKIES.user === undefined || COOKIES.user.length < 10) {
-     resetSession()
+ function isValidUserCookie() {
+     return (COOKIES.user === undefined || COOKIES.user.length < 10)
  }
+
+ if (isValidUserCookie()) resetSession();
 
  function updateProfileApp(udj){
      level = udj.level;
@@ -99,22 +101,30 @@
 
  function loginOrRegisterUser() {
      return "cbb81349-cf71-587c-a1e9-27faf5f2c28c"; // c
+     // return "";
+ }
+
+ function initializeSession() {
+     userUUID = COOKIES.user;
+     if (isValidUserCookie()) {
+         userUUID = loginOrRegisterUser();
+     }
+     if (userUUID.length<10) return;
+
+     axios.post(SA + "user/" + userUUID + "/data")
+          .then(function(resp) {
+              js=resp.data;
+              updateProfileApp(js);
+          })
+          .catch(function(error){
+              console.log(error);
+          })
+
  }
 
  userProfileApp=Vue.createApp({
      data() {
-         userUUID = COOKIES.user;
-         if (userUUID === undefined || userUUID.length < 10) {
-             userUUID = loginOrRegisterUser();
-         }
-         axios.post(SA + "user/" + userUUID + "/data")
-              .then(function(resp) {
-                  js=resp.data;
-                  updateProfileApp(js);
-              })
-              .catch(function(error){
-                  console.log(error);
-              })
+         initializeSession();
          return {
              user: {
                  name:"Gravater"
@@ -128,7 +138,9 @@
              this.logged = false;
              document.cookie="user=";
              userProfileApp.$data.user.name="UNKNOWN";
+             axios.post(SA + "user/" + userProfileApp.$data.user.uuid + "/logout");
              resetSession();
+             initializeSession();
          }
      }
  }).mount("#vue-user-profile-data");
