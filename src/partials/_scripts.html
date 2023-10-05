@@ -45,6 +45,9 @@
 <!-- Volt JS -->
 <script src="@@path/assets/js/volt.js"></script>
 
+<!-- AXIOS -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <!-- Vue 3 JS -->
 <script src="https://unpkg.com/vue@next"></script>
 
@@ -53,19 +56,63 @@
  let API="/api/1.0/"
  let SA=server+API
  var userProfileApp = {};
+ const ERROR = 10;
+ const PATHNAME = window.location.pathname;
+
+ function getCookies() {
+     var pairs = document.cookie.split(";");
+     var cookies = {};
+     for (var i=0; i<pairs.length; i++){
+         var pair = pairs[i].split("=");
+         cookies[(pair[0]+'').trim()] = unescape(pair.slice(1).join('='));
+     }
+     return cookies;
+ }
+ var COOKIES = getCookies();
+
+ function resetSession() {
+     if (PATHNAME == "" || PATHNAME == "/") {
+     } else {
+         window.location.pathname="/";
+     }
+ }
+
+ if (COOKIES.user === undefined) {
+     resetSession()
+ }
+
  function updateProfileApp(udj){
      level = udj.level;
-     if (level=="OK") {
-         userProfileApp.$data.user=udj.value;
+     if (level<ERROR) {
+         let v = udj.value;
+         let uuuid = v.uuid;
+         if (COOKIES.user!=uuuid) {
+             document.cookie = 'user=' + v.uuid;
+         };
+         userProfileApp.$data.user=v;
      } else {
          userProfileApp.$data.user.name="UNKNOWN";
      }
  }
+
+ function loginOrRegisterUser() {
+     return "cbb81349-cf71-587c-a1e9-27faf5f2c28c";
+ }
+
  userProfileApp=Vue.createApp({
      data() {
-         fetch(SA+"user/cbb81349-cf71-587c-a1e9-27faf5f2c28c/data")
-             .then(resp => resp.json())
-             .then(updateProfileApp);
+         userUUID = COOKIES.user;
+         if (userUUID === undefined) {
+             userUUID = loginOrRegisterUser();
+         }
+         axios.post(SA + "user/" + userUUID + "/data")
+              .then(function(resp) {
+                  js=resp.data;
+                  updateProfileApp(js);
+              })
+              .catch(function(error){
+                  console.log(error);
+              })
          return {
              user: {
                  name:"Gravater"
