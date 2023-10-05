@@ -85,6 +85,7 @@
          document.cookie = "user="+value+"; path=/; max-age=604800";
      }
      // alert("SET:"+document.cookie);
+     COOKIES = getCookies();
  }
 
  function resetSession() {
@@ -126,33 +127,57 @@
 
 
      Swal.fire({
-         title: 'Multiple inputs',
+         title: 'Enter Your credential data!',
          html:
     '<label for="alias">User name:</label>' +
     '<input id="alias" class="swal2-input" >' +
-    '<label for="password">Password:</label>' +
-    '<input id="password" class="swal2-input" type="password">',
+    '<label for="password" class="swal2">Password:</label>' +
+    '<input id="password" class="swal2-input" type="password">' +
+    '<br/><br/><center><a href="/pages/signUp.html"><span><strong color="red">Sign Up!<strong><span></a></center>',
          focusConfirm: false,
          preConfirm: () => {
-             return [
-                 document.getElementById('user').value,
-                 document.getElementById('password').value
-             ]
+             return {
+                 alias:document.getElementById('alias').value,
+                 password:document.getElementById('password').value
+             }
          }
      }).then((result) => {
+         data=result.value;
+         axios.post(SA+"user/authenticate", data)
+              .then(function(resp){
+                  let js=resp.data;
+                  let v = js.value;
+                  if (js.level < ERROR) {
+                      Swal.fire({
+                          position: 'top',
+                          icon: 'success',
+                          title: 'Your are logged in!',
+                          showConfirmButton: false,
+                          timer: 1500
+                      }).then(result => {
+                          setUserCookie(v);
+                          initializeSession();
+                      }
+                      );
+                  } else {
+                      Swal.fire(
+                         'Did not log in!',
+                         'You are not logged in. ' + js.description,
+                         'error'
+                      );
+                  }
+              })
+              .catch(function(error){
+                  Swal.fire(
+                      'Cannot authenticate!',
+                      'It seems, there are troubles communicating server!',
+                      'error'
+                  );
+                  return undefined;
+              });
 
-         Swal.fire(JSON.stringify(result.value));
-
-         Swal.fire({
-             position: 'top',
-             icon: 'success',
-             title: 'Your are logged in!',
-             showConfirmButton: false,
-             timer: 1500
-         })
      });
-     return "cbb81349-cf71-587c-a1e9-27faf5f2c28c"; // c
-     // return "";
+     return undefined;
  }
 
  function initializeSession() {
@@ -160,7 +185,7 @@
      if (!isValidUserCookie()) {
          userUUID = loginOrRegisterUser();
      }
-     if (userUUID.length<10) return;
+     if (userUUID === undefined || userUUID.length<10) return;
 
      axios.post(SA + "user/" + userUUID + "/data")
           .then(function(resp) {
