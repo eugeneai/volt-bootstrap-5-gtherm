@@ -77,6 +77,10 @@
      window.location.pathname="/";
  }
 
+ function redirectToLogin() {
+     window.location.pathname="/pages/signUp.html";
+ }
+
  function setUserCookie(value) {
      document.cookie = "user=unknown; max-age=-60"
      if (value === undefined || value=="") {
@@ -100,6 +104,33 @@
          return false;
      } else {
          return true;
+     }
+ }
+
+ function getUserUUID() {
+     if (isValidUserCookie()) {
+         return COOKIES.user;
+     } else {
+         return undefined;
+     }
+ }
+
+ function getIcon(js) {
+     l = js.level
+     if (l == 0) {
+         return "success"
+     } else if (l == 1) {
+         return "success"
+     } else if (l == 2) {
+         return "info"
+     } else if (l == 3) {
+         return "warning"
+     } else if (l == 10) {
+         return "error"
+     } else if (l == 20) {
+         return "error"
+     } else {
+         return "warning"
      }
  }
 

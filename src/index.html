@@ -57,33 +57,36 @@
                                 </a>
                             </li>
                             <li class="breadcrumb-item"><a href="#">Geotherm</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+0                            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
                         </ol>
                     </nav>
-                    <h2 class="h4">Measurements</h2>
-                    <p class="mb-0">Here You can find all Your measurement data.</p>
+                    <h2 class="h4">Projects</h2>
+                    <p class="mb-0">Here You can find all Your project data.</p>
                 </div>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
-                        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                        New Measurement
-                    </a>
-
-                    <!-- Form --
+                <div class="btn-toolbar mb-2 mb-md-0" id="vue-project-control">
+                    <!-- Form -->
                     <form>
                       <div class="mb-2 mb-md-0">
-                        <label for="formFile" class="form-label">Default file input example</label>
-                        <input class="form-control" type="file" id="formFile">
+                        <label for="formFile" class="form-label" hidden="true">Default file input example</label>
+                        <input class="form-control" type="file"
+                               placeholder="SVG, TSF, XLSX"
+                               v-on:change="getFileInputValue"
+                               id="formFile">
                       </div>
                     </form>
-                    End of Form -->
+                    <!-- End of Form -->
                     <div class="btn-group ms-2 ms-lg-3">
+                        <a href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center"
+                           v-on:click="newProject">
+                            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                            New project
+                        </a>
                         <button type="button" class="btn btn-sm btn-outline-gray-600">Share</button>
                         <button type="button" class="btn btn-sm btn-outline-gray-600">Export</button>
                     </div>
                 </div>
             </div>
-            <div class="card card-body border-0 shadow table-wrapper table-responsive">
+            <div class="card card-body border-0 shadow table-wrapper table-responsive" id="vue-table-control">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -148,9 +151,104 @@
             "classes": "bg-dark text-white"
             })
 
-        @@include('./_scripts.html', {
-        "path": "."
-    })
+            @@include('./_scripts.html', {
+            "path": "."
+            })
+            <script type="text/javascript">
+             projectApp=Vue.createApp({
+                 data() {
+                     return {
+                         // All fields, except name, are uuid.
+                         project:{
+                             uuid:"",
+                             user:"",
+                             name:"",
+                             model:""
+                         },
+                         file:null
+                     }
+                 },
+                 methods: {
+                     newProject() {
+                         if (!isValidUserCookie()) {
+                             Swal.fire({
+                                 position: 'top',
+                                 icon: 'error',
+                                 title: 'Please login or register!',
+                                 showConfirmButton: true,
+                                 timer: 10000
+                             }).then(redirectToLogin);
+                         } else if (this.file === null) {
+                             Swal.fire({
+                                 position: 'top',
+                                 icon: 'error',
+                                 title: 'Please choose an CSV, TSV or EXCEL (XLSX) file!',
+                                 showConfirmButton: true,
+                                 timer: 10000
+                             });
+                             return;
+                         } else {
+                             const file = this.file;
+                             // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                             const ext = file.type.split("/")[1];
+                             const test1 = ext.match('csv|tsv');
+                             const test2 = ext.match('spreadsheet');
+                             if (test1 || test2) {
+                                 var formData = new FormData();
+                                 formData.append("file", this.file);
+                                 axios.post(SA+'user/' + getUserUUID() + '/project/upload', formData, {
+                                     headers: {
+                                         'Content-Type': 'multipart/form-data'
+                                     }
+                                 })
+                                 .then(resp => {
+                                     js = resp.data;
+                                     icon = getIcon(js)
+                                     if (js.level < ERROR) {
+                                         Swal.fire({
+                                             position: 'top',
+                                             icon: icon,
+                                             title: js.description,
+                                             showConfirmButton: true,
+                                             timer: 6000
+                                         }).then(navigateHome);
+                                     } else {
+                                         Swal.fire({
+                                             position: 'top',
+                                             icon: icon,
+                                             title: js.description,
+                                             showConfirmButton: true,
+                                             timer: 6000
+                                         }).then(navigateHome);
+                                     }
+                                 })
+                                 .catch(error => {
+                                     Swal.fire({
+                                         position: 'top',
+                                         icon: 'error',
+                                         title: 'Communication error!',
+                                         showConfirmButton: true,
+                                         timer: 10000
+                                     });
+                                 });
+                             } else {
+                                 Swal.fire({
+                                     position: 'top',
+                                     icon: 'error',
+                                     title: 'Please choose an CSV, TSV or EXCEL (XLSX) file!',
+                                     showConfirmButton: true,
+                                     timer: 10000
+                                 });
+                             }
+                         }
+                     },
+                     getFileInputValue(event) {
+                         const files = event.target.files;
+                         this.file = files[0];
+                     }
+                 }
+             }).mount("#vue-project-control");
+            </script>
 
 </body>
 
