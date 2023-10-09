@@ -180,17 +180,6 @@
 
          }).mount('#vue-mount-table');
 
-         vueApp2=Vue.createApp({
-             data() {
-                 return {
-                     dataName: 'UNKNOWN',
-                     input: tbl,
-                     inputLength: tbl.length+10,
-                     batchSize: batchSize
-                 };
-             }
-         }).mount('#vue-total-mount');
-
          nameControl=Vue.createApp({
              data() {
                  return {
@@ -223,8 +212,6 @@
                           vueApp1.$data.input = tbl;
                           vueApp1.$data.inputLength = tbl.length;
                           vueApp1.$data.colNames = dfkeys;
-                          vueApp2.$data.input = tbl;
-                          vueApp2.$data.inputLength = tbl.length;
                       }
                   })
                   .catch(error => {
