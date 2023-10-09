@@ -48,7 +48,7 @@
             })
 
 
-            <div class="table-settings mb-4">
+            <div class="table-settings mb-4" id="vue-header-control">
                 <div class="row align-items-center justify-content-between">
                     <div class="col col-md-6 col-lg-3 col-xl-4">
                         <div class="input-group me-2 me-lg-3 fmxw-400" hidden="true">
@@ -73,7 +73,7 @@
                         </ol>
                     </nav>
                     <h2 class="h4">Measurement</h2>
-                    <p class="mb-0">This is input data for measurement '<span>Yb 63 Cpx</span>'.</p>
+                    <p class="mb-0">This is input data for measurement '<span v-text="name">Yb 63 Cpx</span>'.</p>
                     </div>
                     <!--
                     <div class="col-4 col-md-2 col-xl-1 ps-md-0 text-end">
@@ -93,34 +93,30 @@
                     -->
                 </div>
             </div>
-            <div class="card card-body border-0 shadow table-wrapper table-responsive">
+            <div class="card card-body border-0 shadow table-wrapper table-responsive" id="vue-mount-table">
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th class="border-gray-200">No.</th>
-                            <th class="border-gray-200">Depth, km</th>
-                            <th class="border-gray-200">Preassure, GPa</th>
-                            <th class="border-gray-200">Temperature, C</th>
+                            <!--
+
+                            -->
+                            <th class="border-gray-200" v-for="kitem in colNames">
+                                <span v-text="kitem" />
+                            </th>
                         </tr>
                     </thead>
-                    <tbody id="vue-mount-table">
+                    <tbody >
                         <!-- Item -->
                         <tr v-for="(item, index) in displayInput">
-                            <td>
+                            <td class="fw-normal" >
                                 <a href="#" class="fw-bold" v-text="index+1">
                                     1
                                 </a>
                             </td>
-                            <td>
-                                <a href="#" class="fw-bold" v-text="item.d">
-                                    100
-                                </a>
-                                <!--
-                                <span class="fw-normal">Platinum Subscription Plan</span>
-                                -->
+                            <td v-for="(kitem, kindex) in colNames">
+                                <span class="fw-normal" v-text="item[kitem]">100</span>
                             </td>
-                            <td><span class="fw-normal" v-text="item.p">10</span></td>
-                            <td><span class="fw-normal" v-text="item.t">100</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -146,8 +142,7 @@
                     </nav>
                     <div class="fw-normal small mt-4
                                 mt-lg-0"
-                         id="vue-total-mount"
-                         >Showing <b>10</b> out of <b v-text="inputLength">25</b> entries</div>
+                         >Showing <b v-text="batchSize">10</b> out of <b v-text="input.length">25</b> entries</div>
                 </div>
             </div>
             @@include('./dashboard/_footer.html', {
@@ -172,7 +167,9 @@
                  return {
                      dataName: 'UNKNOWN',
                      input: tbl,
-                     inputLength: tbl.length
+                     inputLength: tbl.length,
+                     colNames: [],
+                     batchSize: batchSize
                  };
              },
              computed: {
@@ -181,19 +178,26 @@
                  }
              }
 
-         });
-         vueApp1.mount('#vue-mount-table');
+         }).mount('#vue-mount-table');
 
          vueApp2=Vue.createApp({
              data() {
                  return {
                      dataName: 'UNKNOWN',
                      input: tbl,
-                     inputLength: tbl.length
+                     inputLength: tbl.length+10,
+                     batchSize: batchSize
                  };
              }
-         });
-         vueApp2.mount('#vue-total-mount');
+         }).mount('#vue-total-mount');
+
+         nameControl=Vue.createApp({
+             data() {
+                 return {
+                     name: "UNKNOWN"
+                 }
+             }
+         }).mount("#vue-header-control");
 
          projectUUID = COOKIES.project;
 
@@ -205,18 +209,22 @@
                       if (js.level < ERROR) {
                           let d = js.value;
                           vueApp1.$data.dataName = d.name;
-                          df = d.data;
-                          keys = Object.keys(df);
-                          col = df[keys[0]]; // Take the first column;
+                          nameControl.$data.name = d.name;
+                          let df = d.data;
+                          let dfkeys = Object.keys(df);
+                          let col = df[dfkeys[0]]; // Take the first column;
                           for (i=0; i<col.length; i++) {
                               row = {};
-                              for (j=0; j<keys.length; j++) {
-                                  row[key[j]] = df[key[j]];
+                              for (j=0; j<dfkeys.length; j++) {
+                                  row[dfkeys[j]] = df[dfkeys[j]][i].toFixed(3);
                               }
                               tbl.push(row);
                           }
                           vueApp1.$data.input = tbl;
                           vueApp1.$data.inputLength = tbl.length;
+                          vueApp1.$data.colNames = dfkeys;
+                          vueApp2.$data.input = tbl;
+                          vueApp2.$data.inputLength = tbl.length;
                       }
                   })
                   .catch(error => {
