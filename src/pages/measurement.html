@@ -159,74 +159,77 @@
     @@include('./_scripts.html', {
         "path": ".."
     })
-    <script>
-      let tbl = [
-        {"t":894.72, "d":130.73, "p":130.73},
-        {"t":1251.02, "d":193.66, "p":193.66},
-        {"t":757.63, "d":109.51, "p":109.51},
-        {"t":1253.81, "d":189.10, "p":189.10},
-        {"t":937.25, "d":153.85, "p":153.85},
-        {"t":752.31, "d":103.88, "p":103.88},
-        {"t":909.47, "d":155.31, "p":155.31},
-        {"t":725.25, "d":88.50, "p":88.50},
-        {"t":954.40, "d":154.84, "p":154.84},
-        {"t":812.31, "d":66.35, "p":66.35},
-        {"t":748.67, "d":66.43, "p":66.43},
-        {"t":1240.87, "d":182.93, "p":182.93},
-        {"t":1118.63, "d":173.08, "p":173.08},
-        {"t":933.82, "d":143.95, "p":143.95},
-        {"t":1244.70, "d":170.89, "p":170.89},
-        {"t":972.98, "d":156.09, "p":156.09},
-        {"t":773.97, "d":104.78, "p":104.78},
-        {"t":1175.45, "d":194.25, "p":194.25},
-        {"t":930.37, "d":147.76, "p":147.76},
-        {"t":752.16, "d":73.10, "p":73.10},
-        {"t":795.28, "d":79.94, "p":79.94},
-        {"t":726.33, "d":77.19, "p":77.19},
-        {"t":968.19, "d":157.75, "p":157.75},
-        {"t":898.97, "d":157.42, "p":157.42},
-        {"t":845.77, "d":83.87, "p":83.87},
-        {"t":903.38, "d":140.16, "p":140.16},
-        {"t":954.12, "d":147.07, "p":147.07},
-        {"t":802.28, "d":80.32, "p":80.32},
-        {"t":778.31, "d":114.70, "p":114.70},
-        {"t":989.37, "d":163.19, "p":163.19},
-        {"t":805.81, "d":115.69, "p":115.69},
-        {"t":967.64, "d":154.23, "p":154.23},
-        {"t":962.27, "d":149.87, "p":149.87},
-        {"t":926.38, "d":152.80, "p":152.80},
-        {"t":1253.55, "d":195.59, "p":195.59},
-        {"t":943.75, "d":164.19, "p":164.19}
-      ];
-     for (i=0;i<tbl.length;i++) {
-         let y=tbl[i].d;
-         tbl[i].p=((y-6.3)/3.04).toFixed(3);
-     }
-     let staticData = {
-         dataName: 'Yb 63 Cpx',
-         input: tbl,
-         inputLength: tbl.length
-      };
-     let batchSize=10;
-     let vueApp1=Vue.createApp({
-         data() {
-             return staticData;
-         },
-         computed: {
-             displayInput: function() {
-                 return staticData.input.slice(0,batchSize);
+        <script>
+         let tbl = [];
+
+         for (i=0;i<tbl.length;i++) {
+             let y=tbl[i].d;
+             tbl[i].p=((y-6.3)/3.04).toFixed(3);
+         }
+         let batchSize=10;
+         vueApp1=Vue.createApp({
+             data() {
+                 return {
+                     dataName: 'UNKNOWN',
+                     input: tbl,
+                     inputLength: tbl.length
+                 };
+             },
+             computed: {
+                 displayInput: function() {
+                     return this.input.slice(0,batchSize);
+                 }
              }
+
+         });
+         vueApp1.mount('#vue-mount-table');
+
+         vueApp2=Vue.createApp({
+             data() {
+                 return {
+                     dataName: 'UNKNOWN',
+                     input: tbl,
+                     inputLength: tbl.length
+                 };
+             }
+         });
+         vueApp2.mount('#vue-total-mount');
+
+         projectUUID = COOKIES.project;
+
+         if (isValidUserCookie() && projectUUID != undefined) {
+             axios.post(SA + "project/" + projectUUID + "/dataframe")
+                  .then( resp => {
+                      js = resp.data;
+                      tbl = [];
+                      if (js.level < ERROR) {
+                          let d = js.value;
+                          vueApp1.$data.dataName = d.name;
+                          df = d.data;
+                          keys = Object.keys(df);
+                          col = df[keys[0]]; // Take the first column;
+                          for (i=0; i<col.length; i++) {
+                              row = {};
+                              for (j=0; j<keys.length; j++) {
+                                  row[key[j]] = df[key[j]];
+                              }
+                              tbl.push(row);
+                          }
+                          vueApp1.$data.input = tbl;
+                          vueApp1.$data.inputLength = tbl.length;
+                      }
+                  })
+                  .catch(error => {
+                      vueApp1.$data.input = [];
+                      vueApp1.$data.inputLength = 0;
+                  })
+         } else {
+             tbl = [];
+             // vueApp1.$data.input=[];
+             // vueApp1.$data.inputLength=0;
          }
 
-     });
-      vueApp1.mount('#vue-mount-table');
-      let vueApp2=Vue.createApp({
-        data() {
-          return staticData;
-        }
-      });
-      vueApp2.mount('#vue-total-mount');
-    </script>
+        </script>
 </body>
 
 </html>

@@ -81,15 +81,22 @@
      window.location.pathname="/pages/signUp.html";
  }
 
- function setUserCookie(value) {
-     document.cookie = "user=unknown; max-age=-60"
+ function redirectToMeasurements() {
+     window.location.pathname="/pages/measurements.html";
+ }
+
+ function setCookie(name, value) {
+     document.cookie = name + "=unknown; max-age=-60"
      if (value === undefined || value=="") {
-         document.cookie = "user=unknown; path=/; max-age=-60"
+         document.cookie = name+"=unknown; path=/; max-age=-60"
      } else {
-         document.cookie = "user="+value+"; path=/; max-age=604800";
+         document.cookie = name+"="+value+"; path=/; max-age=604800";
      }
-     // alert("SET:"+document.cookie);
      COOKIES = getCookies();
+ }
+
+ function setUserCookie(value) {
+     return setCookie("user", value);
  }
 
  function resetSession() {
@@ -254,6 +261,7 @@
                  if (result.isConfirmed) {
                      this.logged = false;
                      setUserCookie(undefined);
+                     setCookie("project", undefined);
                      userProfileApp.$data.user.name="UNKNOWN";
                      axios.post(SA + "user/" + userProfileApp.$data.user.uuid + "/logout");
                      Swal.fire(
