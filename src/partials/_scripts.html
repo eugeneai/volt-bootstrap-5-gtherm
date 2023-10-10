@@ -74,15 +74,15 @@
  // alert("GET:"+document.cookie);
 
  function navigateHome() {
-     window.location.pathname="/";
+     window.location.pathname="/index.html";
  }
 
  function redirectToLogin() {
      window.location.pathname="/pages/signUp.html";
  }
 
- function redirectToMeasurements() {
-     window.location.pathname="/pages/measurements.html";
+ function redirectToMeasurement() {
+     window.location.pathname="/pages/measurement.html";
  }
 
  function setCookie(name, value) {
@@ -100,7 +100,9 @@
  }
 
  function resetSession() {
-     if (PATHNAME == "" || PATHNAME == "/" || PATHNAME == "/pages/signUp.html") {
+     if (PATHNAME == "" || PATHNAME == "/" ||
+         PATHNAME == "/index.html" ||
+         PATHNAME == "/pages/signUp.html") {
      } else {
          navigateHome()
      }

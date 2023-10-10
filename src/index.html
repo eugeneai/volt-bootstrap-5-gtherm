@@ -245,7 +245,7 @@
                                                   title: js.description,
                                                   showConfirmButton: true,
                                                   timer: 6000
-                                              }).then(navigateHome);
+                                              }).then(loadProjects);
                                           } else {
                                               Swal.fire({
                                                   position: 'top',
@@ -253,7 +253,7 @@
                                                   title: js.description,
                                                   showConfirmButton: true,
                                                   timer: 6000
-                                              }).then(navigateHome);
+                                              }).then(loadProjects);
                                           }
                                       })
                                       .catch(error => {
@@ -295,7 +295,7 @@
                      select(uuid, i) {
                          // alert(uuid + " " + i);
                          setCookie("project", uuid);
-                         redirectToMeasurements();
+                         redirectToMeasurement();
                      }
                  }
              }).mount("#vue-table-control");
