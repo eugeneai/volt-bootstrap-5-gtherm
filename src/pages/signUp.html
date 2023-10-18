@@ -132,7 +132,9 @@
                                     <!-- End of Form -->
                                     <div class="mb-4">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="remember">
+                                            <input class="form-check-input" type="checkbox" value=""
+                                                   v-model="agree"
+                                                   id="remember">
                                             <label class="form-check-label fw-normal mb-0" for="remember">
                                                 I agree to the <a href="#" class="fw-bold">terms and conditions</a>
                                             </label>
@@ -180,11 +182,12 @@
          data() {
              return {
                  user:{
-                     alias:"eugene",
-                     org:"The Great Organization",
-                     email:"eugene@irnok.net",
-                     name:"The Great",
-                     password:""
+                     alias:"",
+                     org:"",
+                     email:"",
+                     name:"",
+                     password:"",
+                     agree: false
                  }
              }
          },
@@ -206,8 +209,16 @@
                      });
                      return;
                  };
-                     // axios.post(SA + "user/register",this.user)
-                     axios.post(SA + "user/register", this.user)
+                 if (!this.agree) {
+                     Swal.fire({
+                         icon: 'info',
+                         title: 'Agree with usage conditions!',
+                         text: 'Please agree with conditions which we have not presented yet!'
+                     });
+                     return;
+                 }
+                 // axios.post(SA + "user/register",this.user)
+                 axios.post(SA + "user/register", this.user)
                       .then(function(resp){
                           js=resp.data;
                           v=js.value;
