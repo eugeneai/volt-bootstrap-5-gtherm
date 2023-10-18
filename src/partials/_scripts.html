@@ -53,12 +53,46 @@
 <script src="https://unpkg.com/vue@next"></script>
 
 <script>
- server="http://localhost:8000"
+ wl = {...window.location}
+ if (window.location.hostname=="gtherm.ru") {
+     APISERVER=wl.protocol+"//"+wl.host;
+ } else {
+     APISERVER="http://localhost:8000"
+ }
+ // alert(APISERVER);
  let API="/api/1.0/"
- let SA=server+API
+ let SA=APISERVER+API
  var userProfileApp = {};
  const ERROR = 10;
  const PATHNAME = window.location.pathname;
+ const TEST_UUID = "6afbc852-c32e-401c-bc0c-1213097f2b27"
+
+ function echoServer() {
+     axios.post(SA+"test", {"uuid":TEST_UUID})
+          .then(resp => {
+              let js = resp.data;
+              if (js.level<ERROR) {
+                  if (js.value != TEST_UUID) {
+                      Swal.fire(
+                          'Fatal problem',
+                          'Server does not work correctly! A simple test failed.',
+                          'fatal'
+                      );
+                  } else {
+                      // alert("Comm OK!");
+                  }
+              }
+          })
+          .catch(error => {
+              Swal.fire(
+                  'Communication problems.',
+                  'Sorry, but we cannot connect to the backend server!',
+                  'fatal'
+              );
+          });
+ }
+
+ echoServer();
 
  function getCookies() {
      var pairs = document.cookie.split(";");
