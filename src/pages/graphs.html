@@ -71,7 +71,8 @@
             </div>
             <div class="row">
                 <div class="col-12 mb-4">
-                    <div class="card border-1 show components-section">
+                    <div class="card border-1 show components-section"
+                         id="vue-graph-plots">
                         <div class="card-body">
                             <div class="row mb-4">
                                 <div class="col-lg-6 col-sm-6">
@@ -115,9 +116,21 @@
             })
         </main>
 
-    @@include('./_scripts.html', {
+        @@include('./_scripts.html', {
         "path": "../"
-    })
+        })
+
+        <script>
+         graphApp = Vue.createApp({
+             data() {
+                 return {
+                     figure: "",
+                     chisquare: "",
+                     optimized: ""
+                 };
+             }
+         }).mount("#vue-graph-plots");
+        </script>
 
 </body>
 
