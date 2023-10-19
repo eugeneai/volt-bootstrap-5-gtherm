@@ -115,6 +115,11 @@
      window.location.pathname="/pages/signUp.html";
  }
 
+ function redirectToDashboard() {
+     // window.location.pathname="/index.html";
+     navigateHome();
+ }
+
  function redirectToMeasurement() {
      window.location.pathname="/pages/measurement.html";
  }
@@ -153,6 +158,14 @@
  function getUserUUID() {
      if (isValidUserCookie()) {
          return COOKIES.user;
+     } else {
+         return undefined;
+     }
+ }
+
+ function getProjectUUID() {
+     if (isValidUserCookie()) {
+         return COOKIES.project;
      } else {
          return undefined;
      }
