@@ -79,7 +79,7 @@
                                     <!-- Graph set -->
                                     <div class="mb-4">
                                         <label for="multy-graph">Geotherms for each q0 value</label>
-                                        <div>
+                                        <div v-html="geotherms">
                                             <img src="../assets/img/illustrations/geotherm.svg"
                                                  class="img-fluid" alt="Geotherms result graph">
                                         </div>
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="multy-graph">Spline approximation of Chi^2 deviation value</label>
-                                        <div>
+                                        <div v-html="chisquare">
                                             <img src="../assets/img/illustrations/geotherm-chisquare.svg"
                                                  class="img-fluid" alt="Geotherms result graph">
                                         </div>
@@ -98,7 +98,7 @@
                                     <!-- Form -->
                                     <div class="mb-4">
                                         <label for="multy-graph">The [sub]optimal Geotherm</label>
-                                        <div>
+                                        <div v-html="optimized">
                                             <img src="../assets/img/illustrations/geotherm-opt.svg"
                                                  class="img-fluid" alt="The suboptimal geotherm result graph">
                                         </div>
@@ -124,10 +124,34 @@
          graphApp = Vue.createApp({
              data() {
                  return {
-                     figure: "",
+                     geotherms: "",
                      chisquare: "",
                      optimized: ""
                  };
+             },
+             mounted() {
+                 var vueData = this;
+                 let uuid = undefined;
+                 if (uuid === undefined) {
+                     this.geotherms = '<div class="alert alert-primary" role="alert">Calculate model, and here You get a graphs</div>'
+                     this.chisquare = '<div  class="alert alert-primary" role="alert">Calculate model with <button>optimization</button>, and here You get a chi-square assessment.</div>'
+                     this.optimized = '<div  class="alert alert-primary" role="alert">Calculate model with <button>optimization</button>, You will get a geotherm graphs for the optimal value.</div>'
+                 }
+                 uuid = getProjectUUID();
+                 if (uuid === undefined) return;
+                 axios.post(SA+"project/"+uuid+"/graphs")
+                      .then( resp => {
+                          js = resp.data;
+                          if (js.level < ERROR) {
+                              let graphs = js.value;
+                              graphs.forEach( gr => {
+                                  vueData[gr.key] = gr.figure;
+                              });
+                          } else {
+
+                          }
+                      })
+                      .cach( error => {});
              }
          }).mount("#vue-graph-plots");
         </script>
