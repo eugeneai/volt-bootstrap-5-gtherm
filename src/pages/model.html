@@ -172,6 +172,46 @@
         })
 
         <script>
+         function checkModelPrequisites() {
+             let proceed = true;
+             if (!isValidUserCookie()) {
+                 proceed = false;
+                 Swal.fire({
+                     position: 'top',
+                     icon: 'error',
+                     title: 'Please login or register!',
+                     showConfirmButton: true,
+                     timer: 10000
+                 }).then(redirectToLogin);
+             };
+             if (!proceed) return undefined;
+             if (!checkData(this)) {
+                 proceed = false;
+                 Swal.fire({
+                     position: 'top',
+                     icon: 'error',
+                     title: 'Please enter correct model parameters!',
+                     showConfirmButton: true,
+                     timer: 10000
+                 })
+             }
+             if (!proceed) return undefined;
+
+             let prj_uuid = getProjectUUID();
+             if (prj_uuid === undefined) {
+                 proceed = false;
+                 Swal.fire({
+                     position: 'top',
+                     icon: 'error',
+                     title: 'You must select (click) on a project at Dashboard page! You will be redirected.',
+                     showConfirmButton: true,
+                     timer: 10000
+                 })
+                     .then(redirectToDashboard);
+             }
+             return prj_uuid;
+         }
+
          function checkData(data) {
              return true;
          }
@@ -194,48 +234,16 @@
              },
              methods: {
                  calculate() {
-                     let proceed=true;
-                     if (!isValidUserCookie()) {
-                         proceed = false;
-                         Swal.fire({
-                             position: 'top',
-                             icon: 'error',
-                             title: 'Please login or register!',
-                             showConfirmButton: true,
-                             timer: 10000
-                         }).then(redirectToLogin);
-                     };
-                     if (!proceed) return;
-                     if (!checkData(this)) {
-                         proceed = false;
-                         Swal.fire({
-                             position: 'top',
-                             icon: 'error',
-                             title: 'Please enter correct model parameters!',
-                             showConfirmButton: true,
-                             timer: 10000
-                         })
-                     }
-                     if (!proceed) return;
 
-                     let prj_uuid = getProjectUUID();
-                     if (prj_uuid === undefined) {
-                         proceed = false;
-                         Swal.fire({
-                             position: 'top',
-                             icon: 'error',
-                             title: 'You must select (click) on a project at Dashboard page! You will be redirected.',
-                             showConfirmButton: true,
-                             timer: 10000
-                         })
-                         .then(redirectToDashboard);
-                     }
+                     let prj_uuid = checkModelPrequisites();
+
+                     let proceed = (prj_uuid != undefined);
 
                      if (!proceed) return;
                      swal.fire({
                          position: "top",
                          icon: "info",
-                         title: "Guerying server for computation .....",
+                         title: "Requesting the server for computation .....",
                          showConfirmButton: false,
                          timer: 3000
                      })
@@ -270,12 +278,44 @@
 
                               })
                           });
+                 },
+                 save() {
+                     let prj_uuid = checkModelPrequisites();
+                     axios.post(SA+"project/" + prj_uuid + "/savemodel", this.model)
+                          .then(resp => {
+                              js = resp.data;
+                              if (js.level < ERROR) {
+                                  Swal.fire({
+                                      position: 'top',
+                                      icon: 'success',
+                                      title: 'Your data saved! ' + js.description,
+                                      showConfirmButton: false,
+                                      timer: 3000
+                                  });
+                                  this.saved = true;
+                              } else {
+                                  Swal.fire({
+                                      position: 'top',
+                                      icon: 'error',
+                                      title: 'Saving has failed! Server notes: ' + js.description,
+                                      showConfirmButton: true,
+                                      timer: 10000
+                                  })
+                              }
+                          })
+                          .catch(error => {
+                              Swal.fire({
+                                  position: 'top',
+                                  icon: 'error',
+                                  title: 'Server communication error! (or some other problem)',
+                                  showConfirmButton: true,
+                                  timer: 10000
+                              })
+                          });
                  }
-
              }
          }).mount("#vue-model")
         </script>
-
 </body>
 
 </html>
