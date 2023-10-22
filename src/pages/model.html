@@ -232,9 +232,40 @@
                      saved:true
                  }
              },
+             mounted() {
+                 uuid = getProjectUUID();
+                 if (uuid === undefined) return;
+                 axios.post(SA+"project/" + uuid + "/model")
+                      .then( resp => {
+                          js = resp.data;
+                          if (js.level < ERROR) {
+                              let mdata = {...js.value}
+                              delete mdata._id;
+                              this.model = mdata;
+                              this.saved = true;
+                          } else {
+                              Swal.fire({
+                                  position: 'top',
+                                  icon: 'error',
+                                  title: 'Model data loading has failed! Server notes: ' + js.description,
+                                  showConfirmButton: true,
+                                  timer: 10000
+                              })
+                          }
+                      })
+                      .catch( error => {
+                          Swal.fire({
+                              position: 'top',
+                              icon: 'error',
+                              title: 'Server communication error! Cannot load model data.',
+                              showConfirmButton: true,
+                              timer: 10000
+                          })
+                      })
+             },
              methods: {
                  calculate() {
-
+                     this.save();
                      let prj_uuid = checkModelPrequisites();
 
                      let proceed = (prj_uuid != undefined);
