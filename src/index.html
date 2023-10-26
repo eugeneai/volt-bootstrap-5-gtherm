@@ -129,7 +129,7 @@
                     There are no projects yet! Add one or more by presssing "New project" button above.
                 </div>
                 <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between" v-if="length>0">
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation example" hidden="true">
                         <ul class="pagination mb-0">
                             <li class="page-item">
                                 <a class="page-link" href="#">Previous</a>
@@ -145,7 +145,8 @@
                             </li>
                         </ul>
                     </nav>
-                    <div class="fw-normal small mt-4 mt-lg-0">Showing <b v-text="batch">1</b>
+                    <div class="fw-normal small mt-4 mt-lg-0">Showing <b v-text="length">1</b> entries</div>
+                    <div class="fw-normal small mt-4 mt-lg-0" hidden="true">Showing <b v-text="batch">1</b>
                         out of <b v-text="length">1</b> entries</div>
                 </div>
             </div>
@@ -288,7 +289,7 @@
                      return {
                          "records":projectList,
                          "length":projectList.length,
-                         "batch":batchSize
+                         "batch":projectList.length
                      }
                  },
                  methods: {
