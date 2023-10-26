@@ -1,4 +1,4 @@
-<!--
+m<!--
 
 =========================================================
 * Volt Free - Bootstrap 5 Dashboard
@@ -97,12 +97,63 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="border-gray-200">No.</th>
+                            <th class="border-gray-200">No.
+                            </th>
                             <!--
 
                             -->
-                            <th class="border-gray-200" v-for="kitem in colNames">
-                                <span v-text="kitem" />
+                            <th class="border-gray-200" v-for="(kitem, kindex) in colRolesVisual">
+                                <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span v-text="kitem" />
+
+                                </a>
+
+                                <div class="dropdown-menu dashboard-dropdown dropdown-menu-end mt-2 py-1" id="vue-user-control">
+                                    <button class="dropdown-item d-flex align-items-center"
+                                            v-on:click="roleClick(kindex,'NAME')">
+                                        <svg class="dropdown-icon text-gray-400 me-2" viewBox="0 0 24 24" fill="currentcolor" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M7.0498 7.0498H7.0598M10.5118 3H7.8C6.11984 3 5.27976 3 4.63803 3.32698C4.07354 3.6146 3.6146 4.07354 3.32698 4.63803C3 5.27976 3 6.11984 3 7.8V10.5118C3 11.2455 3 11.6124 3.08289 11.9577C3.15638 12.2638 3.27759 12.5564 3.44208 12.8249C3.6276 13.1276 3.88703 13.387 4.40589 13.9059L9.10589 18.6059C10.2939 19.7939 10.888 20.388 11.5729 20.6105C12.1755 20.8063 12.8245 20.8063 13.4271 20.6105C14.112 20.388 14.7061 19.7939 15.8941 18.6059L18.6059 15.8941C19.7939 14.7061 20.388 14.112 20.6105 13.4271C20.8063 12.8245 20.8063 12.1755 20.6105 11.5729C20.388 10.888 19.7939 10.2939 18.6059 9.10589L13.9059 4.40589C13.387 3.88703 13.1276 3.6276 12.8249 3.44208C12.5564 3.27759 12.2638 3.15638 11.9577 3.08289C11.6124 3 11.2455 3 10.5118 3ZM7.5498 7.0498C7.5498 7.32595 7.32595 7.5498 7.0498 7.5498C6.77366 7.5498 6.5498 7.32595 6.5498 7.0498C6.5498 6.77366 6.77366 6.5498 7.0498 6.5498C7.32595 6.5498 7.5498 6.77366 7.5498 7.0498Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                        Name
+                                    </button>
+                                    <button class="dropdown-item d-flex align-items-center"
+                                            v-on:click="roleClick(kindex,'T_C')">
+                                        <svg class="dropdown-icon text-gray-400 me-2" width="20px" height="20px" viewBox="0 0 20 20" fill="currentcolor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 15.9998C7.44772 15.9998 7 16.4475 7 16.9998C7 17.5521 7.44772 17.9998 8 17.9998C8.55228 17.9998 9 17.5521 9 16.9998C9 16.4475 8.55228 15.9998 8 15.9998ZM8 15.9998L8.00707 12M8 16.9998L8.00707 17.0069M20 5C20 6.10457 19.1046 7 18 7C16.8954 7 16 6.10457 16 5C16 3.89543 16.8954 3 18 3C19.1046 3 20 3.89543 20 5ZM12 16.9998C12 19.209 10.2091 20.9998 8 20.9998C5.79086 20.9998 4 19.209 4 16.9998C4 15.9854 4.37764 15.0591 5 14.354L5 6C5 4.34315 6.34315 3 8 3C9.65685 3 11 4.34315 11 6V14.354C11.6224 15.0591 12 15.9854 12 16.9998Z"></path></svg>
+
+                                        Temperature, °C
+                                    </button>
+                                    <button class="dropdown-item d-flex align-items-center"
+                                            v-on:click="roleClick(kindex,'T_K')">
+                                        <svg class="dropdown-icon text-gray-400 me-2" width="20px" height="20px" viewBox="0 0 20 20" fill="currentcolor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 15.9998C7.44772 15.9998 7 16.4475 7 16.9998C7 17.5521 7.44772 17.9998 8 17.9998C8.55228 17.9998 9 17.5521 9 16.9998C9 16.4475 8.55228 15.9998 8 15.9998ZM8 15.9998L8.00707 12M8 16.9998L8.00707 17.0069M20 5C20 6.10457 19.1046 7 18 7C16.8954 7 16 6.10457 16 5C16 3.89543 16.8954 3 18 3C19.1046 3 20 3.89543 20 5ZM12 16.9998C12 19.209 10.2091 20.9998 8 20.9998C5.79086 20.9998 4 19.209 4 16.9998C4 15.9854 4.37764 15.0591 5 14.354L5 6C5 4.34315 6.34315 3 8 3C9.65685 3 11 4.34315 11 6V14.354C11.6224 15.0591 12 15.9854 12 16.9998Z"></path></svg>
+                                        Temperature, °K
+                                    </button>
+                                    <button class="dropdown-item d-flex align-items-center"
+                                            v-on:click="roleClick(kindex,'P_GPa')">
+                                        <svg class="dropdown-icon text-gray-400 me-2" fill="currentcolor" height="64px" width="64px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <g> <path d="M94.567,84.369c-10.085,0-18.262,8.176-18.262,18.262v23.854c0,10.085,8.176,18.262,18.262,18.262 s18.262-8.176,18.262-18.262v-23.854C112.829,92.545,104.652,84.369,94.567,84.369z"></path> <path d="M493.738,281.964H352.357c-10.085,0-18.262,8.176-18.262,18.262v42.65h-18.483c-6.713,0-12.175-5.461-12.175-12.175 v-73.154c24.448-0.614,44.15-20.677,44.15-45.27V113.74c0-24.593-19.702-44.656-44.15-45.27V50.179 c0-10.085-8.176-18.262-18.262-18.262s-18.262,8.176-18.262,18.262V68.47c-24.448,0.614-44.15,20.677-44.15,45.27v98.536 c0,24.594,19.702,44.656,44.15,45.27V330.7c0,26.852,21.846,48.698,48.698,48.698h18.483v64.161H155.44 c-23.496,0-42.611-19.115-42.611-42.611V219.265c43.433-8.534,76.305-46.883,76.305-92.781c0-52.145-42.422-94.567-94.567-94.567 C42.422,31.917,0,74.34,0,126.484c0,45.898,32.871,84.247,76.305,92.781v181.683c0,43.635,35.5,79.134,79.134,79.134 c13.402,0,322.418,0,338.299,0c10.085,0,18.262-8.176,18.262-18.262V300.226C512,290.139,503.824,281.964,493.738,281.964z M268.063,221.051c-4.839,0-8.775-3.937-8.775-8.775V113.74c0-4.839,3.936-8.775,8.775-8.775h34.225 c4.839,0,8.775,3.936,8.775,8.775v98.536c0,4.839-3.936,8.775-8.775,8.775H268.063z M94.567,184.528 c-32.004,0-58.043-26.038-58.043-58.043c0-32.006,26.039-58.043,58.043-58.043s58.043,26.038,58.043,58.043 C152.61,158.49,126.573,184.528,94.567,184.528z M389.96,443.56h-19.342V318.488h19.342V443.56z M475.476,443.559h-48.993 V318.488h48.993V443.559z"></path> </g> </g> </g> </g></svg>
+                                        Pressure, GPa
+                                    </button>
+                                    <button class="dropdown-item d-flex align-items-center"
+                                        v-on:click="roleClick(kindex,'P_kPa')">
+                                        <svg class="dropdown-icon text-gray-400 me-2" fill="currentcolor" height="64px" width="64px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <g> <path d="M94.567,84.369c-10.085,0-18.262,8.176-18.262,18.262v23.854c0,10.085,8.176,18.262,18.262,18.262 s18.262-8.176,18.262-18.262v-23.854C112.829,92.545,104.652,84.369,94.567,84.369z"></path> <path d="M493.738,281.964H352.357c-10.085,0-18.262,8.176-18.262,18.262v42.65h-18.483c-6.713,0-12.175-5.461-12.175-12.175 v-73.154c24.448-0.614,44.15-20.677,44.15-45.27V113.74c0-24.593-19.702-44.656-44.15-45.27V50.179 c0-10.085-8.176-18.262-18.262-18.262s-18.262,8.176-18.262,18.262V68.47c-24.448,0.614-44.15,20.677-44.15,45.27v98.536 c0,24.594,19.702,44.656,44.15,45.27V330.7c0,26.852,21.846,48.698,48.698,48.698h18.483v64.161H155.44 c-23.496,0-42.611-19.115-42.611-42.611V219.265c43.433-8.534,76.305-46.883,76.305-92.781c0-52.145-42.422-94.567-94.567-94.567 C42.422,31.917,0,74.34,0,126.484c0,45.898,32.871,84.247,76.305,92.781v181.683c0,43.635,35.5,79.134,79.134,79.134 c13.402,0,322.418,0,338.299,0c10.085,0,18.262-8.176,18.262-18.262V300.226C512,290.139,503.824,281.964,493.738,281.964z M268.063,221.051c-4.839,0-8.775-3.937-8.775-8.775V113.74c0-4.839,3.936-8.775,8.775-8.775h34.225 c4.839,0,8.775,3.936,8.775,8.775v98.536c0,4.839-3.936,8.775-8.775,8.775H268.063z M94.567,184.528 c-32.004,0-58.043-26.038-58.043-58.043c0-32.006,26.039-58.043,58.043-58.043s58.043,26.038,58.043,58.043 C152.61,158.49,126.573,184.528,94.567,184.528z M389.96,443.56h-19.342V318.488h19.342V443.56z M475.476,443.559h-48.993 V318.488h48.993V443.559z"></path> </g> </g> </g> </g></svg>
+                                        Pressure, kbar
+                                    </button>
+                                    <button class="dropdown-item d-flex align-items-center"
+                                            v-on:click="roleClick(kindex,'D_km')">
+                                        <svg  class="dropdown-icon text-gray-400 me-2" fill="currentcolor" viewBox="0 0 1000 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 1000 1000" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"></g><g id="SVGRepo_iconCarrier"> <metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata> <g> <g transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)"> <path d="M2066.1,4834.2c-74.4-22.1-203.1-66.3-287.5-98.5c-357.9-144.8-1178.3-591.2-1218.5-665.6c-38.2-70.4-24.1-154.8,32.2-199.1c30.2-24.1,72.4-42.2,94.5-42.2c22.1,0,162.9,70.4,313.7,158.8c542.9,313.7,997.3,518.8,1250.7,567c112.6,20.1,146.8,18.1,249.3-10.1c229.2-68.4,524.8-239.3,860.6-502.7c245.3-191,277.5-213.1,325.7-213.1c24.1,0,126.7,54.3,231.2,122.7c400.1,261.4,774.1,458.4,1065.7,561c185,66.3,366,62.3,573.1-8c223.2-76.4,669.6-297.6,1011.4-502.7c156.8-94.5,307.6-172.9,333.8-172.9c28.1,0,108.6,52.3,205.1,132.7c343.8,285.5,748,516.8,1021.5,585.1c130.7,32.2,150.8,32.2,295.6,2c269.5-56.3,679.6-275.5,1081.8-577.1c187-140.8,247.3-162.9,321.7-122.7c56.3,28.1,88.5,122.7,64.3,187c-40.2,104.6-542.9,454.4-916.9,637.4c-518.8,255.4-812.3,265.4-1272.8,50.3c-197.1-92.5-494.7-281.5-695.7-440.3c-66.3-50.3-124.6-92.5-130.7-92.5c-6,0-102.5,56.3-213.1,122.7c-259.4,156.8-754,400.1-985.3,482.6c-162.9,60.3-203.1,66.3-412.2,66.3c-205.1,2-249.3-4-392.1-56.3c-239.3-84.5-567-247.3-890.8-444.4l-289.6-172.9L3540,4307.4c-333.8,257.4-663.5,446.4-916.9,524.8C2452.2,4884.4,2247.1,4886.5,2066.1,4834.2z"></path> <path d="M5050,2879.7c-150.8-168.9-1719.2-2240-1727.2-2286.2c-8-40.2,2-70.4,36.2-112.6c68.4-78.4,158.8-78.4,235.2,2c32.2,32.2,343.8,434.3,695.7,892.8c349.9,458.4,655.5,852.5,675.6,874.7c38.2,38.2,38.2-16.1,38.2-3116.6c0-2650.1-4-3150.8-28.1-3126.7c-14.1,16.1-321.7,442.4-681.6,947c-361.9,504.7-671.6,922.9-689.7,931c-16.1,6-56.3,12.1-88.5,12.1c-66.3,0-140.8-80.4-140.8-152.8c0-46.3,1588.5-2292.2,1672.9-2364.6c58.3-50.3,160.9-46.3,211.1,8c24.1,26.1,436.3,538.9,918.9,1140.1c758,947.1,876.7,1103.9,876.7,1162.2c0,40.2-16.1,82.4-40.2,106.6c-46.3,46.2-156.8,54.3-205.1,16.1c-16.1-14.1-341.8-414.2-719.8-890.8c-378-474.5-705.8-882.7-725.9-904.8c-38.2-38.2-38.2,32.2-38.2,3114.6v3154.8l707.8-943c388.1-518.8,715.8-949.1,727.9-957.1c44.2-30.2,166.9-16.1,201.1,22.1c38.2,40.2,48.2,140.8,22.1,185c-52.3,84.4-1689,2266.1-1723.2,2296.3C5202.9,2938.1,5100.3,2934,5050,2879.7z"></path> <path d="M139.8,2409.2c-56.3-70.4-52.3-138.7,8-199.1l48.3-50.3h993.3h993.3l42.2,46.2c56.3,60.3,58.3,160.9,4,215.2c-38.2,38.2-66.4,40.2-1043.6,40.2H180L139.8,2409.2z"></path> <path d="M7587.6,2421.3c-54.3-60.3-50.3-176.9,8.1-223.2c44.2-36.2,98.5-38.2,1039.5-38.2c967.2,0,995.3,2,1033.5,40.2c24.1,24.1,40.2,66.4,40.2,110.6s-16.1,86.5-40.2,110.6c-38.2,38.2-66.3,40.2-1041.6,40.2C7641.9,2461.5,7623.8,2461.5,7587.6,2421.3z"></path> <path d="M159.9-45.9C91.6-104.2,85.5-194.7,143.8-265l50.3-58.3h999.3h999.3l38.2,48.3c56.3,70.4,50.3,170.9-14.1,221.2c-52.3,42.2-72.4,42.2-1033.5,42.2C278.6-11.7,200.1-13.7,159.9-45.9z"></path> <path d="M7597.7-51.9c-88.5-88.5-62.3-219.2,54.3-263.4c32.2-12.1,418.2-16.1,1015.4-14.1l965.2,6l38.2,48.3c56.3,70.4,50.3,170.9-14.1,221.2c-52.3,42.2-72.4,42.2-1035.5,42.2C7668-11.7,7635.9-13.7,7597.7-51.9z"></path> <path d="M153.9-2545.2c-50.3-52.3-58.3-72.4-48.3-126.7c26.1-138.8-12.1-134.7,1077.8-134.7c961.1,0,981.2,0,1033.5,42.2c64.3,50.3,70.4,150.8,14.1,221.2l-38.2,48.3l-989.3,6l-987.3,6L153.9-2545.2z"></path> <path d="M7643.9-2505c-108.6-44.2-130.7-176.9-46.2-261.4c38.2-38.2,70.4-40.2,1023.5-40.2c963.1,0,983.2,0,1035.5,42.2c64.3,50.3,70.4,150.8,14.1,221.2l-38.2,48.3l-973.2,4C8122.5-2488.9,7668-2495,7643.9-2505z"></path> </g> </g> </g></svg>
+
+                                        Depth, km
+                                    </button>
+                                    <button class="dropdown-item d-flex align-items-center"
+                                            v-on:click="roleClick(kindex,'D_m')">
+                                        <svg  class="dropdown-icon text-gray-400 me-2" fill="currentcolor" viewBox="0 0 1000 1000" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 1000 1000" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC"></g><g id="SVGRepo_iconCarrier"> <metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata> <g> <g transform="translate(0.000000,511.000000) scale(0.100000,-0.100000)"> <path d="M2066.1,4834.2c-74.4-22.1-203.1-66.3-287.5-98.5c-357.9-144.8-1178.3-591.2-1218.5-665.6c-38.2-70.4-24.1-154.8,32.2-199.1c30.2-24.1,72.4-42.2,94.5-42.2c22.1,0,162.9,70.4,313.7,158.8c542.9,313.7,997.3,518.8,1250.7,567c112.6,20.1,146.8,18.1,249.3-10.1c229.2-68.4,524.8-239.3,860.6-502.7c245.3-191,277.5-213.1,325.7-213.1c24.1,0,126.7,54.3,231.2,122.7c400.1,261.4,774.1,458.4,1065.7,561c185,66.3,366,62.3,573.1-8c223.2-76.4,669.6-297.6,1011.4-502.7c156.8-94.5,307.6-172.9,333.8-172.9c28.1,0,108.6,52.3,205.1,132.7c343.8,285.5,748,516.8,1021.5,585.1c130.7,32.2,150.8,32.2,295.6,2c269.5-56.3,679.6-275.5,1081.8-577.1c187-140.8,247.3-162.9,321.7-122.7c56.3,28.1,88.5,122.7,64.3,187c-40.2,104.6-542.9,454.4-916.9,637.4c-518.8,255.4-812.3,265.4-1272.8,50.3c-197.1-92.5-494.7-281.5-695.7-440.3c-66.3-50.3-124.6-92.5-130.7-92.5c-6,0-102.5,56.3-213.1,122.7c-259.4,156.8-754,400.1-985.3,482.6c-162.9,60.3-203.1,66.3-412.2,66.3c-205.1,2-249.3-4-392.1-56.3c-239.3-84.5-567-247.3-890.8-444.4l-289.6-172.9L3540,4307.4c-333.8,257.4-663.5,446.4-916.9,524.8C2452.2,4884.4,2247.1,4886.5,2066.1,4834.2z"></path> <path d="M5050,2879.7c-150.8-168.9-1719.2-2240-1727.2-2286.2c-8-40.2,2-70.4,36.2-112.6c68.4-78.4,158.8-78.4,235.2,2c32.2,32.2,343.8,434.3,695.7,892.8c349.9,458.4,655.5,852.5,675.6,874.7c38.2,38.2,38.2-16.1,38.2-3116.6c0-2650.1-4-3150.8-28.1-3126.7c-14.1,16.1-321.7,442.4-681.6,947c-361.9,504.7-671.6,922.9-689.7,931c-16.1,6-56.3,12.1-88.5,12.1c-66.3,0-140.8-80.4-140.8-152.8c0-46.3,1588.5-2292.2,1672.9-2364.6c58.3-50.3,160.9-46.3,211.1,8c24.1,26.1,436.3,538.9,918.9,1140.1c758,947.1,876.7,1103.9,876.7,1162.2c0,40.2-16.1,82.4-40.2,106.6c-46.3,46.2-156.8,54.3-205.1,16.1c-16.1-14.1-341.8-414.2-719.8-890.8c-378-474.5-705.8-882.7-725.9-904.8c-38.2-38.2-38.2,32.2-38.2,3114.6v3154.8l707.8-943c388.1-518.8,715.8-949.1,727.9-957.1c44.2-30.2,166.9-16.1,201.1,22.1c38.2,40.2,48.2,140.8,22.1,185c-52.3,84.4-1689,2266.1-1723.2,2296.3C5202.9,2938.1,5100.3,2934,5050,2879.7z"></path> <path d="M139.8,2409.2c-56.3-70.4-52.3-138.7,8-199.1l48.3-50.3h993.3h993.3l42.2,46.2c56.3,60.3,58.3,160.9,4,215.2c-38.2,38.2-66.4,40.2-1043.6,40.2H180L139.8,2409.2z"></path> <path d="M7587.6,2421.3c-54.3-60.3-50.3-176.9,8.1-223.2c44.2-36.2,98.5-38.2,1039.5-38.2c967.2,0,995.3,2,1033.5,40.2c24.1,24.1,40.2,66.4,40.2,110.6s-16.1,86.5-40.2,110.6c-38.2,38.2-66.3,40.2-1041.6,40.2C7641.9,2461.5,7623.8,2461.5,7587.6,2421.3z"></path> <path d="M159.9-45.9C91.6-104.2,85.5-194.7,143.8-265l50.3-58.3h999.3h999.3l38.2,48.3c56.3,70.4,50.3,170.9-14.1,221.2c-52.3,42.2-72.4,42.2-1033.5,42.2C278.6-11.7,200.1-13.7,159.9-45.9z"></path> <path d="M7597.7-51.9c-88.5-88.5-62.3-219.2,54.3-263.4c32.2-12.1,418.2-16.1,1015.4-14.1l965.2,6l38.2,48.3c56.3,70.4,50.3,170.9-14.1,221.2c-52.3,42.2-72.4,42.2-1035.5,42.2C7668-11.7,7635.9-13.7,7597.7-51.9z"></path> <path d="M153.9-2545.2c-50.3-52.3-58.3-72.4-48.3-126.7c26.1-138.8-12.1-134.7,1077.8-134.7c961.1,0,981.2,0,1033.5,42.2c64.3,50.3,70.4,150.8,14.1,221.2l-38.2,48.3l-989.3,6l-987.3,6L153.9-2545.2z"></path> <path d="M7643.9-2505c-108.6-44.2-130.7-176.9-46.2-261.4c38.2-38.2,70.4-40.2,1023.5-40.2c963.1,0,983.2,0,1035.5,42.2c64.3,50.3,70.4,150.8,14.1,221.2l-38.2,48.3l-973.2,4C8122.5-2488.9,7668-2495,7643.9-2505z"></path> </g> </g> </g></svg>
+                                        Depth, m
+                                    </button>
+                                    <button class="dropdown-item d-flex align-items-center"
+                                            v-on:click="roleClick(kindex,'ignored')">
+                                        <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 24 24" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g transform="translate(0 -1028.4)"> <path d="m22 12c0 5.523-4.477 10-10 10-5.5228 0-10-4.477-10-10 0-5.5228 4.4772-10 10-10 5.523 0 10 4.4772 10 10z" transform="translate(0 1029.4)"></path> <path d="m22 12c0 5.523-4.477 10-10 10-5.5228 0-10-4.477-10-10 0-5.5228 4.4772-10 10-10 5.523 0 10 4.4772 10 10z" transform="translate(0 1028.4)"></path> <rect height="4" width="12" y="1039.4" x="6"></rect> <rect height="3" width="12" y="1039.4" x="6" fill="#ecf0f1"></rect> </g> </g></svg>
+
+
+                                        Ignore column
+                                    </button>
+                                </div>
                             </th>
                         </tr>
                     </thead>
@@ -142,7 +193,16 @@
                     </nav>
                     <div class="fw-normal small mt-4
                                 mt-lg-0"
-                         >Showing <b v-text="batchSize">10</b> out of <b v-text="input.length">25</b> entries</div>
+                    >Showing <b v-text="batchSize">10</b> out of <b v-text="input.length">25</b> entries</div>
+                </div>
+                <div class="btn-toolbar mb-2 mb-md-0 float-right">
+                    <div class="btn-group ms-2 ms-lg-3">
+                        <button href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center"
+                                v-on:click="saveSetup" v-bind:disabled="rolesNotCnanged">
+                            <svg class="icon icon-xs me-2" fill="none" stroke="#000000" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"> <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-154.000000, -517.000000)" fill="#ffffff"> <path d="M172,522 C172,521.447 172.448,521 173,521 C173.552,521 174,521.447 174,522 L174,526 C174,526.553 173.552,527 173,527 C172.448,527 172,526.553 172,526 L172,522 L172,522 Z M163,529 L177,529 C177.552,529 178,528.553 178,528 L178,517 L162,517 L162,528 C162,528.553 162.448,529 163,529 L163,529 Z M182,517 L180,517 L180,529 C180,530.104 179.104,531 178,531 L162,531 C160.896,531 160,530.104 160,529 L160,517 L158,517 C155.791,517 154,518.791 154,521 L154,545 C154,547.209 155.791,549 158,549 L182,549 C184.209,549 186,547.209 186,545 L186,521 C186,518.791 184.209,517 182,517 L182,517 Z" id="save-floppy" sketch:type="MSShapeGroup"> </path> </g> </g> </g></svg>
+                            Save setup
+                        </button>
+                    </div>
                 </div>
             </div>
             @@include('./dashboard/_footer.html', {
@@ -169,15 +229,92 @@
                      input: tbl,
                      inputLength: tbl.length,
                      colNames: [],
-                     batchSize: batchSize
+                     batchSize: batchSize,
+                     colRoles: []
                  };
              },
              computed: {
                  displayInput: function() {
                      return this.input.slice(0,batchSize);
+                 },
+                 rolesNotCnanged: function() {
+                     let cn = this.colNames;
+                     let cr = this.colRoles;
+                     for (i=0; i<cn.length; i++) {
+                         if (cn[i]!=cr[i]) return false;
+                     }
+                     return true;
+                 },
+                 colRolesVisual () {
+                     return this.colRoles;
+                 }
+             },
+             methods: {
+                 roleClick(colNumber, colRole) {
+                     this.colRoles[colNumber] = colRole;
+                     // alert(colRole);
+                 },
+                 saveSetup() {
+                     let cr = this.colRoles;
+                     let hasT = false;
+                     let hasD = false;
+                     let hasP = false;
+                     cr.forEach(e => {
+                         if (e.length>1) {
+                             c = e.split("_")[0];
+                             if (c=="P") hasP = true;
+                             if (c=="D") hasD = true;
+                             if (c=="T") hasT = true;
+                         }
+                     });
+                     if (hasT && (hasP || hasD)) {
+                         uuid = getProjectUUID();
+                         if (uuid === undefined) {
+                             alert("Empty project data!");
+                             return;
+                         }
+                         axios.post(SA + "project/" + uuid + "/setup",
+                                    {colNames:this.colNames, colRoles:cr})
+                              .then( resp => {
+                                  js = resp.data;
+                                  if (js.level<ERROR) {
+                                      Swal.fire({
+                                          position: 'top',
+                                          icon: 'success',
+                                          title: 'Your setup successfully saved!',
+                                          showConfirmButton: true,
+                                          timer: 10000
+                                      });
+                                  } else {
+                                      Swal.fire({
+                                          position: 'top',
+                                          icon: 'error',
+                                          title: 'Problem on the server: ' + js.description,
+                                          showConfirmButton: true,
+                                          timer: 10000
+                                      });
+                                  }
+                              })
+                              .catch( error => {
+                                  Swal.fire({
+                                      position: 'top',
+                                      icon: 'error',
+                                      title: 'A server communication or some other error happened!',
+                                      showConfirmButton: true,
+                                      timer: 10000
+                                  });
+                              });
+                     } else {
+                         Swal.fire({
+                             position: 'top',
+                             icon: 'error',
+                             title: 'Check definition column T_..., one of D_... and P_...!',
+                             showConfirmButton: true,
+                             timer: 10000
+                         });
+                     }
                  }
              }
-
          }).mount('#vue-mount-table');
 
          nameControl=Vue.createApp({
@@ -217,6 +354,19 @@
                           vueApp1.$data.input = tbl;
                           vueApp1.$data.inputLength = tbl.length;
                           vueApp1.$data.colNames = dfkeys;
+                          vueApp1.$data.colRoles = [...dfkeys];
+                          if ('rename' in d) {
+                              let ren = d.rename;
+                              let cr = [];
+                              dfkeys.forEach( k => {
+                                  if (k in ren) {
+                                      cr.push(ren[k]);
+                                  } else {
+                                      cr.push(k);
+                                  }
+                              });
+                              vueApp1.$data.colRoles = cr;
+                          }
                       }
                   })
                   .catch(error => {
