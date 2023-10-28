@@ -172,7 +172,7 @@
                     </div>
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="viewarchive"
-                               v-model="viewArchived">
+                               v-model="viewArchived" v-on:change="changeViewArchived">
                         <label class="form-check-label" for="flexSwitchCheckDefault">View archived projects</label><br/>
                     </div>
             </div>
@@ -190,11 +190,11 @@
              const batchSize = 10;
              projectList = [];
 
-             function loadProjects() {
+             function loadProjects(archived) {
                  if (!isValidUserCookie()) {
                      return projectList;
                  }
-                 axios.post(SA + "user/" + getUserUUID() + "/projects")
+                 axios.post(SA + "user/" + getUserUUID() + "/projects/" + archived)
                       .then( resp => {
                           js = resp.data;
                           if (js.level < ERROR) {
@@ -329,6 +329,10 @@
                      archiveSelected(item, index) {
                          let v = this.archiving[index];
                          this.archiving[index] = v == true ? undefined : true ;
+                     },
+                     changeViewArchived() {
+                         // alert("Change to view-archived:" + this.viewArchived);
+                         loadProjects(this.viewArchived);
                      }
                  },
                  computed: {
@@ -341,7 +345,7 @@
                      }
                  }
              }).mount("#vue-table-control");
-             loadProjects();
+             loadProjects(false);
 
             </script>
 
