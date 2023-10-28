@@ -106,7 +106,7 @@
                         <tr v-for="(item, index) in records">
                             <td><input class="form-check-input"
                                        type="checkbox"
-                                       v-on:click="selected(item,index)"
+                                       v-on:click="archiveSelected(item,index)"
                                        ></td>
                             <td>
                                 <a href="#" class="fw-bold" v-text="index+1" v-on:click="select(item.uuid, index)">
@@ -157,20 +157,24 @@
                     <div class="fw-normal small mt-4 mt-lg-0">
                         <button class="btn btn-sm btn-gray-800 d-inline-flex align-items-center"
                                 v-on:click="archiveSelectedProjects"
-                                v-bind:disabled="true"
-                                v-if="! archiveView">
+                                v-bind:disabled="! hasArchiving"
+                                v-if="! viewArchived">
                             <svg class="icon icon-xs me-2" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M22,4V8H2V4A1,1,0,0,1,3,3H21A1,1,0,0,1,22,4ZM5,21a1,1,0,0,1-1-1V10H20V20a1,1,0,0,1-1,1Zm2-7a1,1,0,0,0,1,1h8a1,1,0,0,0,0-2H8A1,1,0,0,0,7,14Z"></path></g></svg>
                             Archive
                         </button>
                         <button class="btn btn-sm btn-gray-800 d-inline-flex align-items-center"
                                 v-on:click="archiveSelectedProjects"
-                                v-bind:disabled="true"
-                                v-if="archiveView">
+                                v-bind:disabled="! hasArchiving"
+                                v-if="viewArchived">
                             <svg class="icon icon-xs me-2" fill="#ffffff" viewBox="0 0 36 36" version="1.1" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>unarchive-solid</title> <path d="M18,21a3,3,0,0,1-2.22-1H5V32a2,2,0,0,0,2,2H29a2,2,0,0,0,2-2V20H20.21A3,3,0,0,1,18,21Zm4,3a1,1,0,0,1-1,1H15a1,1,0,0,1,0-2h6A1,1,0,0,1,22,24Z" class="clr-i-solid clr-i-solid-path-1"></path><path d="M15,12H5.5A1.5,1.5,0,0,0,4,13.5V18H15Z" class="clr-i-solid clr-i-solid-path-2"></path><path d="M30.5,12H21v6H32V13.5A1.5,1.5,0,0,0,30.5,12Z" class="clr-i-solid clr-i-solid-path-3"></path><path d="M13,9.55,17,5.6V18a1,1,0,1,0,2,0V5.6l4,3.95a1,1,0,1,0,1.41-1.42L18,1.78,11.61,8.13A1,1,0,0,0,13,9.55Z" class="clr-i-solid clr-i-solid-path-4"></path> <rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect> </g></svg>
                             Restore
                         </button>
                     </div>
-                </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="viewarchive"
+                               v-model="viewArchived">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">View archived projects</label><br/>
+                    </div>
             </div>
 
             @@include('./dashboard/_footer.html', {
@@ -311,7 +315,9 @@
                      return {
                          "records":projectList,
                          "length":projectList.length,
-                         "batch":projectList.length
+                         "batch":projectList.length,
+                         "viewArchived":false,
+                         archiving:[]
                      }
                  },
                  methods: {
@@ -319,6 +325,19 @@
                          // alert(uuid + " " + i);
                          setCookie("project", uuid);
                          redirectToMeasurement();
+                     },
+                     archiveSelected(item, index) {
+                         let v = this.archiving[index];
+                         this.archiving[index] = v == true ? undefined : true ;
+                     }
+                 },
+                 computed: {
+                     hasArchiving() {
+                         let answer = false;
+                         this.archiving.forEach( item => {
+                             if (item == true) answer = true;
+                         });
+                         return answer;
                      }
                  }
              }).mount("#vue-table-control");
