@@ -170,10 +170,24 @@
                               });
                               vueData.figNames=figNames;
                           } else {
-
+                              Swal.fire({
+                                  position: 'top',
+                                  icon: 'error',
+                                  title: 'Cannot load graphs: ' + js.description,
+                                  showConfirmButton: true,
+                                  timer: 10000
+                              });
                           }
                       })
-                      .cach( error => {});
+                      .catch(error => {
+                          Swal.fire({
+                              position: 'top',
+                              icon: 'error',
+                              title: 'Communication Error: Cannot load graphs',
+                              showConfirmButton: true,
+                              timer: 10000
+                          });
+                      });
              },
              methods: {
                  download(figure) {
