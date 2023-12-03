@@ -351,14 +351,15 @@ m<!--
                           let d = js.value;
                           vueApp1.$data.dataName = d.name;
                           nameControl.$data.name = d.name;
-                          let df = d.data;
-                          let dfkeys = Object.keys(df);
-                          let col = df[dfkeys[0]]; // Take the first column;
+                          let df = d.data.columns;
+                          let dfkeys = d.data.colindex.names
+                          let dflookup = d.data.colindex.lookup
+                          let col = df[0]; // Take the first column;
                           for (i=0; i<col.length; i++) {
                               row = {};
                               for (j=0; j<dfkeys.length; j++) {
                                   let k = dfkeys[j];
-                                  let val = df[k][i];
+                                  let val = df[dflookup[k]-1][i];
                                   if (typeof val === 'number') {
                                       val = val.toFixed(3);
                                   }
