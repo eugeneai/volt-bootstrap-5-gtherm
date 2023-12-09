@@ -410,7 +410,8 @@
              }).mount("#vue-table-control");
              loadProjects(false);
              function updateTagsOnServer(projects, op, tag) {
-                 axios.post(SA+"projects/changetag/" + op + "/arg/" + tag, {projects:projects})
+                 let userUuid=getUserUUID();
+                 axios.post(SA+"projects/changetag/" + op + "/arg/" + tag, {projects:projects, user:userUuid})
                       .then( resp => {
                           let js = resp.data;
                           if (js.level < ERROR) {

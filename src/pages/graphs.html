@@ -162,7 +162,7 @@
                       .then( resp => {
                           js = resp.data;
                           if (js.level < ERROR) {
-                              let graphs = js.value;
+                              let graphs = js.value.figures;
                               let figNames = {};
                               graphs.forEach( gr => {
                                   vueData[gr.key] = gr.figure;
