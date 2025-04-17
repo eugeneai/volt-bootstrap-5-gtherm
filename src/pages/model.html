@@ -141,13 +141,22 @@
                                 </div>
                                 <div class="col-lg-4 col-sm-6">
                                     <!-- Form -->
-                                    <div class="mb-4">
+                                    <div class="mb-1"> <!-- mb-4 -->
                                         <label for="optimize">Apply optimization stages</label>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" id="optimize"
                                                    v-model="model.optimize">
                                             <label class="form-check-label" for="flexSwitchCheckDefault">Optimize results</label><br/>
                                             <small class="form-text text-muted">Optimization allows one to calculate optimal q0 value.</small>
+                                        </div>
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="showMisfit">Misfit Graph</label>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="showMisfit"
+                                                   v-model="model.showMisfit">
+                                            <label class="form-check-label" for="flexSwitchCheckDefault">Show Misfit</label><br/>
+                                            <small class="form-text text-muted">Show Misfit in graph setting q0-Misfit to q0+Misfit values.</small>
                                         </div>
                                     </div>
                                     <div class="mb-1">
@@ -228,6 +237,7 @@
                          , H:"[0,0.4,0.4,0.02]"
                          , iref:"3"
                          , optimize:false
+                         , showMisfit:true
                      },
                      saved:true
                  }
