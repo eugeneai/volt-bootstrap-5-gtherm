@@ -67,16 +67,14 @@
                     </div>
                 </div>
             </div>
-            <div class="card card-body border-0 shadow table-wrapper table-responsive" id="vue-mount-table">
-                <h1> Notebook </h1>
-                <pluto-editor src="http://ваш-сервер:1234/edit?id=ваш-блокнот.jl"
-                              style="width: 100%; height: 80vh; border: none;">
-                </pluto-editor>
+            <div id="vue-pluto-frame">
+            <div class="card card-body border-0 shadow table-wrapper table-responsive" style="height: 85vh;">
+                <iframe height="100%" allow="fullscreen" style="border: none;" id="pluto_frame" v-bind:src="pluto_src"></iframe>
             </div>
             <div class="btn-toolbar mb-2 mb-md-0 float-right">
                 <div class="btn-group ms-2 ms-lg-3">
-                    <button href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center" v-on:click="saveSetup"
-                        v-bind:disabled="rolesNotCnanged">
+                    <button href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center" v-on:click="saveNotebook"
+                        >
                         <svg class="icon icon-xs me-2" fill="none" stroke="#000000" viewBox="0 0 32 32" version="1.1"
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                             xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#000000">
@@ -93,8 +91,9 @@
                                 </g>
                             </g>
                         </svg>
-                        Save setup
+                        Save notebook
                     </button>
+                </div>
                 </div>
             </div>
 
@@ -109,104 +108,76 @@
         })
 
         <script>
-         graphApp = Vue.createApp({
-             data() {
-                 return {
-                     geotherms: "",
-                     chisquare: "",
-                     optimized: ""
-                 };
-             },
-             mounted() {
-                 var vueData = this;
-                 let uuid = undefined;
-                 if (uuid === undefined) {
-                     this.geotherms = '<div class="alert alert-primary" role="alert">Calculate model, and here You get a graphs</div>'
-                     this.chisquare = '<div  class="alert alert-primary" role="alert">Calculate model with <button>optimization</button>, and here You get a chi-square assessment.</div>'
-                     this.optimized = '<div  class="alert alert-primary" role="alert">Calculate model with <button>optimization</button>, You will get a geotherm graphs for the optimal value.</div>'
-                 }
-                 uuid = getProjectUUID();
-                 if (uuid === undefined) return;
-                 axios.post(SA+"project/"+uuid+"/graphs")
-                      .then( resp => {
-                          js = resp.data;
-                          if (js.level < ERROR) {
-                              let graphs = js.value.figures;
-                              let figNames = {};
-                              graphs.forEach( gr => {
-                                  vueData[gr.key] = gr.figure;
-                                  figNames[gr.key] = true;
-                              });
-                              vueData.figNames=figNames;
-                          } else {
-                              Swal.fire({
-                                  position: 'top',
-                                  icon: 'error',
-                                  title: 'Cannot load graphs: ' + js.description,
-                                  showConfirmButton: true,
-                                  timer: 10000
-                              });
-                          }
-                      })
-                      .catch(error => {
-                          Swal.fire({
-                              position: 'top',
-                              icon: 'error',
-                              title: 'Communication Error: Cannot load graphs',
-                              showConfirmButton: true,
-                              timer: 10000
-                          });
-                      });
-             },
-             methods: {
-                 download(figure) {
-                     uuid = getProjectUUID();
-                     if (figure in this.figNames) {
-                         axios({
-                             url:SA+"project/" + uuid +
-                                 "/figure/" + figure,
-                             method: "GET",
-                             responseType: 'blob'
-                         })
-                             .then( resp => {
-                                 // create file link in browser's memory
-                                 const href = URL.createObjectURL(resp.data);
+            let PLUTO_SRC = "http://localhost:1234/edit?path="
+            graphApp = Vue.createApp({
+                data() {
+                    return {
+                        project: "",
+                        pluto_src: PLUTO_SRC
+                    };
+                },
+                mounted() {
+                    var vueData = this;
+                    let uuid = getProjectUUID();
+                    if (uuid === undefined) {
+                        Swal.fire({
+                            position: 'top',
+                            icon: 'error',
+                            title: 'No project has been used previously!',
+                            showConfirmButton: true,
+                            timer: 10000
+                        });
+                        return;
+                    }
+                    vueData.project = uuid
+                    vueData.pluto_src = PLUTO_SRC + encodeURIComponent(SA + "project/" + uuid + "/notebook.jl")
+                },
+                methods: {
+                    saveNotebook() {
+                        uuid = getProjectUUID();
+                        el = document.getElementById("pluto_frame").contentWindow.document.body
+                            .getElementsByClassName("export_card");
+                        console.log(el);
 
-                                 // create "a" HTML element with href to file & click
-                                 const link = document.createElement('a');
-                                 link.href = href;
-                                 link.setAttribute('download', uuid+"-"+figure+'.svg'); //or any other extension
-                                 document.body.appendChild(link);
-                                 link.click();
-
-                                 // clean up "a" element & remove ObjectURL
-                                 document.body.removeChild(link);
-                                 URL.revokeObjectURL(href);
-                             })
-                         .catch( error => {
-                             Swal.fire({
-                                 position: 'top',
-                                 icon: 'error',
-                                 title: 'Cannot download file "' + figure + '.svg"',
-                                 showConfirmButton: true,
-                                 timer: 10000
-                             });
-                         })
-                     } else {
-                         alert("Should not came here!");
-                     }
-                 },
-                 disabled(figure) {
-                     if ("figNames" in this) {
-                         return ! (figure in this.figNames);
-                     } else {
-                         return true;
-                     }
-                 }
-             }
-         }).mount("#vue-graph-plots");
+                        axios.post({
+                            url: SA + "project/" + uuid +
+                                "/save_notebook/",
+                            data: { notebook: "Notebook " + uuid }
+                        })
+                            .then(resp => {
+                                js = resp.data;
+                                if (js.level < ERROR) {
+                                    Swal.fire({
+                                        position: 'top',
+                                        icon: 'success',
+                                        title: 'Your notebook successfully saved!',
+                                        showConfirmButton: true,
+                                        timer: 10000
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        position: 'top',
+                                        icon: 'error',
+                                        title: 'Problem on the server: ' + js.description,
+                                        showConfirmButton: true,
+                                        timer: 10000
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                Swal.fire({
+                                    position: 'top',
+                                    icon: 'error',
+                                    title: 'Cannot save notebook!',
+                                    showConfirmButton: true,
+                                    timer: 10000
+                                });
+                            });
+                    }
+                }
+            }).mount("#vue-pluto-frame");
         </script>
-
+        
 </body>
 
 </html>
