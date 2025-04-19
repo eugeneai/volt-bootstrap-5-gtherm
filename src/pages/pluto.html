@@ -68,6 +68,10 @@
                 </div>
             </div>
             <div id="vue-pluto-frame">
+            <div class="card card-body border-0 shadow table-wrapper table-responsive" style="height: 85vh;" hidden="true">
+                <span>URL:{{ pluto_url }} </span><br/>
+                <span>eURL:{{ pluto_src }} </span>
+            </div>
             <div class="card card-body border-0 shadow table-wrapper table-responsive" style="height: 85vh;">
                 <iframe height="100%" allow="fullscreen" style="border: none;" id="pluto_frame" v-bind:src="pluto_src"></iframe>
             </div>
@@ -108,12 +112,13 @@
         })
 
         <script>
-            let PLUTO_SRC = "http://localhost:1234/edit?path="
+            let PLUTO_SRC = "http://localhost:1234/open?url="
             graphApp = Vue.createApp({
                 data() {
                     return {
                         project: "",
-                        pluto_src: PLUTO_SRC
+                        pluto_src: "",
+                        pluto_url: PLUTO_SRC
                     };
                 },
                 mounted() {
@@ -130,7 +135,12 @@
                         return;
                     }
                     vueData.project = uuid
-                    vueData.pluto_src = PLUTO_SRC + encodeURIComponent(SA + "project/" + uuid + "/notebook.jl")
+                    let url_arg = SA + "project/" +
+                        uuid + "/notebook/" +
+                        uuid + ".jl"
+                    vueData.pluto_url = PLUTO_SRC + url_arg
+                        vueData.pluto_src = PLUTO_SRC + encodeURIComponent(url_arg)
+                    console.log(vueData.pluto_src)
                 },
                 methods: {
                     saveNotebook() {
