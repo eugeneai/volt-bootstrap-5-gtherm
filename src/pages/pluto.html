@@ -139,7 +139,8 @@
                         uuid + "/notebook/" +
                         uuid + ".jl"
                     vueData.pluto_url = PLUTO_SRC + url_arg
-                        vueData.pluto_src = PLUTO_SRC + encodeURIComponent(url_arg)
+                    vueData.pluto_src = PLUTO_SRC + encodeURIComponent(url_arg)
+                    console.log(vueData.pluto_url)
                     console.log(vueData.pluto_src)
                 },
                 methods: {
@@ -187,7 +188,7 @@
                 }
             }).mount("#vue-pluto-frame");
         </script>
-        
+
 </body>
 
 </html>
