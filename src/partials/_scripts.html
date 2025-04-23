@@ -53,8 +53,12 @@
  wl = {...window.location}
  if (window.location.hostname=="gtherm.ru") {
      APISERVER=wl.protocol+"//"+wl.host;
+     PLUTOSERVER=wl.protocol+"//"+wl.host;
+     PRODUCTION=true
  } else {
      APISERVER="http://localhost:8000"
+     PLUTOSERVER="http://localhost:1234"
+     PRODUCTION=false
  }
  // alert(APISERVER);
  let API="/api/1.0/"

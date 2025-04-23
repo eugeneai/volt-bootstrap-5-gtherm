@@ -121,7 +121,13 @@
         })
 
         <script>
-            let PLUTO_SRC = "http://localhost:1234/open?url="
+            PLUTO_SRC = PLUTOSERVER
+            if (PRODUCTION) {
+                PLUTO_SRC = PLUTOSERVER + "/plutonb/open?url="                
+            } else {
+                PLUTO_SRC = PLUTOSERVER + "/open?url="                
+            }
+
             graphApp = Vue.createApp({
                 data() {
                     return {
